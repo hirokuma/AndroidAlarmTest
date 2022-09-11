@@ -4,8 +4,10 @@ import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
@@ -21,13 +23,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         createNotificationChannel()
+
+        val receiver = ComponentName(this, BootCompletedReceiver::class.java)
+        this.packageManager.setComponentEnabledSetting(
+            receiver,
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
     }
 
     private fun createNotificationChannel() {
         val name = "のてぃふぃけーしょんちゃんねる"
         val descriptionText = "のてぃふぃけーしょんちゃんねるのですくりぷしょん"
         val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(NOTIFICATION_ID, name, importance).apply {
+        val channel = NotificationChannel(NOTIFICATION_CHAN_ID, name, importance).apply {
             description = descriptionText
         }
         val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -68,7 +77,8 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private val TAG = MainActivity::class.java.name
 
-        const val NOTIFICATION_ID = "10000"
+        const val NOTIFICATION_CHAN_ID = "10000"
         const val NOTIFY_TEST_ID = 10000
+        const val NOTIFY_BOOT_ID = 10001
     }
 }

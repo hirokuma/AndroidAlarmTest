@@ -8,9 +8,11 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
 
-class NotificationReceiver: BroadcastReceiver() {
+class BootCompletedReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d(TAG, "Receive !!")
+        if (intent?.action == "android.intent.action.BOOT_COMPLETED") {
+            Log.d(TAG, "Boot Completed !!")
+        }
         if (context == null) {
             Log.d(TAG, "null context")
             return
@@ -18,7 +20,7 @@ class NotificationReceiver: BroadcastReceiver() {
 
         val builder = createNotification(context)
         val notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(MainActivity.NOTIFY_TEST_ID, builder.build())
+        notificationManager.notify(MainActivity.NOTIFY_BOOT_ID, builder.build())
     }
 
     private fun createNotification(context: Context): NotificationCompat.Builder {
@@ -32,14 +34,14 @@ class NotificationReceiver: BroadcastReceiver() {
 
         return NotificationCompat.Builder(context, MainActivity.NOTIFICATION_CHAN_ID)
             .setSmallIcon(com.google.android.material.R.drawable.ic_clock_black_24dp)
-            .setContentTitle("のてぃふぃけーしょんたいとる")
-            .setContentText("のてぃふぃけーしょんてきすと")
+            .setContentTitle("ぶーとこんぷりーとたいとる")
+            .setContentText("ぶーとこんぷりーとてきすと")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(wakeupMePendingIntent)
             .setAutoCancel(true)
     }
 
     companion object {
-        private val TAG = NotificationReceiver::class.java.name
+        private val TAG = BootCompletedReceiver::class.java.name
     }
 }
